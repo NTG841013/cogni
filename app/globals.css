@@ -1,26 +1,162 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Colors - Primary */
+  --primary-500: hsl(25 95% 53%);
+  --primary-400: hsl(27 96% 61%);
+  --primary-300: hsl(32 96% 72%);
+  --primary-200: hsl(33 98% 83%);
+  --primary-100: hsl(20 100% 95%);
+
+  /* Colors - Neutral */
+  --neutral-900: hsl(222 47% 11%);
+  --neutral-700: hsl(215 25% 27%);
+  --neutral-500: hsl(215 16% 47%);
+  --neutral-300: hsl(212 33% 84%);
+  --neutral-200: hsl(214 32% 91%);
+  --neutral-100: hsl(210 40% 96%);
+  --neutral-50: hsl(240 10% 98%);
+  --white: hsl(0 0% 100%);
+
+  /* Shadcn Semantic Tokens */
+  --background: var(--white);
+  --foreground: var(--neutral-900);
+  --card: var(--white);
+  --card-foreground: var(--neutral-900);
+  --popover: var(--white);
+  --popover-foreground: var(--neutral-900);
+  --primary: var(--primary-500);
+  --primary-foreground: var(--white);
+  --secondary: var(--neutral-100);
+  --secondary-foreground: var(--neutral-900);
+  --muted: var(--neutral-100);
+  --muted-foreground: var(--neutral-500);
+  --accent: var(--primary-100);
+  --accent-foreground: var(--primary-500);
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(0 0% 98%);
+  --border: var(--neutral-200);
+  --input: var(--neutral-200);
+  --ring: var(--primary-500);
+
+  /* Radius */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius: var(--radius-sm);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 12px 24px -4px rgba(15, 23, 42, 0.10);
+  --shadow-xl: 0 20px 40px -8px rgba(15, 23, 42, 0.12);
+}
+
+.dark {
+  --background: var(--neutral-900);
+  --foreground: var(--white);
+  --card: var(--neutral-900);
+  --card-foreground: var(--white);
+  --popover: var(--neutral-900);
+  --popover-foreground: var(--white);
+  --primary: var(--primary-400);
+  --primary-foreground: var(--neutral-900);
+  --secondary: var(--neutral-700);
+  --secondary-foreground: var(--white);
+  --muted: var(--neutral-700);
+  --muted-foreground: var(--neutral-300);
+  --accent: var(--neutral-700);
+  --accent-foreground: var(--white);
+  --destructive: hsl(0 62.8% 30.6%);
+  --destructive-foreground: hsl(0 0% 98%);
+  --border: var(--neutral-700);
+  --input: var(--neutral-700);
+  --ring: var(--primary-400);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Custom Cogni Colors */
+  --color-primary-500: var(--primary-500);
+  --color-primary-400: var(--primary-400);
+  --color-primary-300: var(--primary-300);
+  --color-primary-200: var(--primary-200);
+  --color-primary-100: var(--primary-100);
+  --color-neutral-900: var(--neutral-900);
+  --color-neutral-700: var(--neutral-700);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-200: var(--neutral-200);
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-50: var(--neutral-50);
+
+  /* Radius */
+  --radius-xs: var(--radius-xs);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+
+  /* Spacing */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+
+  /* Typography */
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-playfair);
+
+  /* Type Scale */
+  --text-display-1: 48px;
+  --text-display-1--line-height: 56px;
+  --text-display-2: 36px;
+  --text-display-2--line-height: 44px;
+  --text-heading-1: 28px;
+  --text-heading-1--line-height: 36px;
+  --text-heading-2: 22px;
+  --text-heading-2--line-height: 30px;
+  --text-heading-3: 18px;
+  --text-heading-3--line-height: 26px;
+  --text-body-large: 16px;
+  --text-body-large--line-height: 24px;
+  --text-body: 14px;
+  --text-body--line-height: 20px;
+  --text-small: 12px;
+  --text-small--line-height: 16px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
 }
