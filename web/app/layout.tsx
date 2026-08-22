@@ -2,6 +2,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { shadcn } from "@clerk/ui/themes";
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
+import { SanityLive } from "@/lib/sanity/live";
 import "./globals.css";
 
 const inter = Inter({
@@ -33,6 +34,7 @@ export default function RootLayout({
         <ClerkProvider appearance={{ theme: shadcn }}>
           {children}
         </ClerkProvider>
+        <SanityLive />
       </body>
     </html>
   );
