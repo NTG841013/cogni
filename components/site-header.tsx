@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { SignInButton, UserButton, Show } from "@clerk/nextjs"
 import Image from "next/image"
 
 export function SiteHeader() {
@@ -49,18 +50,18 @@ export function SiteHeader() {
           </nav>
         </div>
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" className="text-neutral-500">
-            <Bell className="h-5 w-5" />
-            <span className="sr-only">Notifications</span>
-          </Button>
-          <div className="h-9 w-9 overflow-hidden rounded-full bg-neutral-200">
-            <Image
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150"
-              alt="User avatar"
-              width={36}
-              height={36}
-            />
-          </div>
+          <Show when="signed-in">
+            <Button variant="ghost" size="icon" className="text-neutral-500">
+              <Bell className="h-5 w-5" />
+              <span className="sr-only">Notifications</span>
+            </Button>
+            <UserButton />
+          </Show>
+          <Show when="signed-out">
+            <SignInButton mode="modal">
+              <Button>Sign In</Button>
+            </SignInButton>
+          </Show>
         </div>
       </div>
     </header>
