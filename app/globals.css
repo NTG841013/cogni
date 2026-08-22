@@ -150,6 +150,17 @@
   --text-body--line-height: 20px;
   --text-small: 12px;
   --text-small--line-height: 16px;
+
+  @keyframes scroll-slow {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  --animate-scroll-slow: scroll-slow 60s linear infinite;
 }
 
 @layer base {
@@ -158,5 +169,14 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
+  }
+}
+
+@layer components {
+  .container {
+    width: 100%;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
   }
 }
