@@ -28,7 +28,7 @@ export const lessonType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'poster',
+      name: 'thumbnail',
       title: 'Poster / Thumbnail',
       type: 'image',
       options: {

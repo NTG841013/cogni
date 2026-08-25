@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import { defineArrayMember, defineField, defineType } from 'sanity'
 import { UserIcon } from '@sanity/icons'
 
 export const instructorType = defineType({
@@ -31,11 +31,13 @@ export const instructorType = defineType({
     }),
     defineField({
       name: 'expertise',
-      type: 'string',
+      type: 'array',
+      of: [defineArrayMember({ type: 'string' })],
     }),
     defineField({
       name: 'bio',
-      type: 'text',
+      type: 'array',
+      of: [defineArrayMember({ type: 'block' })],
     }),
   ],
 })
