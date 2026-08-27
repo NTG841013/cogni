@@ -12,7 +12,9 @@ export const COURSES_QUERY = defineQuery(`
     popular,
     studentCount,
     category->{ title, "slug": slug.current },
-    instructor->{ name, "slug": slug.current, photo }
+    instructor->{ name, "slug": slug.current, photo },
+    "moduleCount": count(modules),
+    "totalDuration": math::sum(modules[].lessons[]->duration)
   }
 `)
 
@@ -21,6 +23,11 @@ export const COURSE_QUERY = defineQuery(`
     ...,
     instructor->,
     category->,
+    learningOutcomes[] {
+      icon,
+      title,
+      description
+    },
     modules[] {
       ...,
       lessons[]-> {
@@ -78,5 +85,12 @@ export const SEARCH_QUERY = defineQuery(`
       "matchedChapters": chapters[label match $term],
       "matchedChunks": chunks[text match $term]
     }
+  }
+`)
+
+export const USER_PROGRESS_QUERY = defineQuery(`
+  *[_type == "progress" && clerkUserId == $userId][0] {
+    ...,
+    completedLessons[]->{ _id }
   }
 `)

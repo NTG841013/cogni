@@ -1,0 +1,205 @@
+import { notFound } from "next/navigation"
+import Image from "next/image"
+import { auth } from "@clerk/nextjs/server"
+import { stegaClean } from "@sanity/client/stega"
+import { 
+  BarChart, 
+  Clock, 
+  BookOpen, 
+  Users, 
+  ArrowRight, 
+  Bookmark,
+  CheckCircle2,
+  Layers,
+  Workflow,
+  Gauge,
+  Rocket,
+  Database,
+  Cloud,
+  Layout as LayoutIcon,
+} from "lucide-react"
+
+import { serverClient } from "@/lib/sanity/client"
+import { COURSE_QUERY, USER_PROGRESS_QUERY } from "@/lib/sanity/queries"
+import { urlFor } from "@/lib/sanity/image"
+import { formatDuration, formatStudentCount } from "@/lib/utils"
+import { SiteHeader } from "@/components/site-header"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
+import { Card } from "@/components/ui/card"
+import { ModuleAccordion } from "./ModuleAccordion"
+import { COURSE_QUERY_RESULT } from "@/sanity.types"
+
+interface CoursePageProps {
+  params: Promise<{ slug: string }>
+}
+
+type LearningOutcome = NonNullable<NonNullable<COURSE_QUERY_RESULT>['learningOutcomes']>[number]
+
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+  layers: Layers,
+  workflow: Workflow,
+  gauge: Gauge,
+  rocket: Rocket,
+  database: Database,
+  cloud: Cloud,
+  layout: LayoutIcon,
+}
+
+function DynamicIcon({ name, className }: { name: string; className?: string }) {
+  const Icon = ICON_MAP[name.toLowerCase()] || CheckCircle2
+  return <Icon className={className} />
+}
+
+export default async function CoursePage({ params }: CoursePageProps) {
+  const { slug } = await params
+  const { userId } = await auth()
+
+  const course = await serverClient.fetch(COURSE_QUERY, { slug })
+
+  if (!course) {
+    notFound()
+  }
+
+  const progress = userId 
+    ? await serverClient.fetch(USER_PROGRESS_QUERY, { userId })
+    : null
+
+  const lessons = course.modules?.flatMap((m) => m.lessons || []) || []
+  const totalLessons = lessons.length
+  const totalDuration = lessons.reduce((acc, l) => acc + (l.duration || 0), 0)
+  
+  const completedLessonsIds = progress?.completedLessons?.map((cl) => cl._id) || []
+  const completedLessonsInCourse = lessons.filter((l) => completedLessonsIds.includes(l._id)).length
+
+  const progressPercentage = totalLessons > 0 
+    ? Math.round((completedLessonsInCourse / totalLessons) * 100) 
+    : 0
+
+  return (
+    <div className="min-h-screen bg-neutral-50 flex flex-col relative overflow-x-hidden">
+      <SiteHeader />
+
+      <main className="flex-1 pb-32">
+        <div className="container mx-auto px-4 py-8">
+          <Breadcrumb className="mb-12">
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">All Courses</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{stegaClean(course.title)}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+
+          {/* Hero Section */}
+          <section className="grid lg:grid-cols-[1fr_520px] gap-12 items-center mb-24">
+            <div className="space-y-8">
+              {course.popular && (
+                <Badge variant="popular" className="px-4 py-1 rounded-full text-xs tracking-wider uppercase">
+                  Popular
+                </Badge>
+              )}
+              <h1 className="text-display-1 font-serif text-neutral-900 leading-tight">
+                {stegaClean(course.title)}
+              </h1>
+              <p className="text-body-large text-neutral-500 max-w-2xl leading-relaxed">
+                {stegaClean(course.summary)}
+              </p>
+              
+              <div className="flex flex-wrap items-center gap-x-8 gap-y-4 pt-4">
+                <div className="flex items-center gap-2 text-neutral-400">
+                  <BarChart className="h-4 w-4" />
+                  <span className="text-small capitalize">{course.level}</span>
+                </div>
+                <div className="flex items-center gap-2 text-neutral-400">
+                  <Clock className="h-4 w-4" />
+                  <span className="text-small">{formatDuration(totalDuration)}</span>
+                </div>
+                <div className="flex items-center gap-2 text-neutral-400">
+                  <BookOpen className="h-4 w-4" />
+                  <span className="text-small">{course.modules?.length || 0} modules</span>
+                </div>
+                <div className="flex items-center gap-2 text-neutral-400">
+                  <Users className="h-4 w-4" />
+                  <span className="text-small">{formatStudentCount(course.studentCount || 0)} students</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 pt-6">
+                <Button size="lg" className="h-14 px-8 rounded-lg bg-gradient-to-r from-primary to-primary-400 hover:opacity-90 text-white font-medium text-lg gap-2 border-none shadow-md shadow-primary/20">
+                  {progressPercentage > 0 ? "Continue Learning" : "Start Learning"}
+                  <ArrowRight className="h-5 w-5" />
+                </Button>
+                <Button variant="secondary" size="lg" className="h-14 px-8 rounded-lg font-medium text-lg gap-2 border-neutral-200 bg-white">
+                  <Bookmark className="h-5 w-5" />
+                  Bookmark
+                </Button>
+              </div>
+            </div>
+
+            <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl shadow-neutral-100">
+              {course.coverImage && (
+                <Image
+                  src={urlFor(course.coverImage).width(1200).height(675).url()}
+                  alt={stegaClean(course.title) || ""}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              )}
+            </div>
+          </section>
+
+          {/* What you'll learn */}
+          <section className="mb-24">
+            <h2 className="text-heading-1 font-serif text-neutral-900 mb-10">What you&apos;ll learn</h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              {course.learningOutcomes?.map((outcome: LearningOutcome, i: number) => (
+                <Card key={i} className="p-8 border-neutral-100 shadow-sm hover:shadow-md transition-shadow rounded-xl">
+                  <div className="flex items-start gap-6">
+                    <DynamicIcon name={outcome.icon || ""} className="h-8 w-8 text-primary shrink-0 mt-1" />
+                    <div className="space-y-2">
+                      <h3 className="text-heading-3 font-sans font-semibold text-neutral-900">
+                        {outcome.title}
+                      </h3>
+                      <p className="text-body text-neutral-500">
+                        {outcome.description}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          {/* Course Content */}
+          <section>
+            <div className="flex items-end justify-between mb-10">
+              <h2 className="text-heading-1 font-serif text-neutral-900">Course Content</h2>
+              <span className="text-small text-neutral-400 mb-2">
+                {course.modules?.length || 0} modules • {formatDuration(totalDuration)}
+              </span>
+            </div>
+
+            <ModuleAccordion 
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              modules={(course.modules as any) || []} 
+              completedLessonsIds={completedLessonsIds} 
+            />
+          </section>
+        </div>
+      </main>
+    </div>
+  )
+}

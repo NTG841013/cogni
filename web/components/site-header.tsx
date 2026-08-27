@@ -12,24 +12,9 @@ export function SiteHeader() {
         <div className="flex items-center gap-10">
           <Link href="/" className="flex items-center gap-2">
             <div className="flex items-center justify-center">
-              <svg
-                width="32"
-                height="32"
-                viewBox="0 0 32 32"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M26 6H6V22L12 16V12H26V6Z"
-                  fill="currentColor"
-                  className="text-primary"
-                />
-                <path
-                  d="M6 10L12 16V20H26V26H6V10Z"
-                  fill="currentColor"
-                  className="text-primary-400"
-                />
-              </svg>
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                <div className="w-5 h-5 border-t-4 border-l-4 border-b-4 border-white rounded-sm" />
+              </div>
             </div>
             <span className="text-xl font-bold tracking-tight text-neutral-900">Cogni</span>
           </Link>
