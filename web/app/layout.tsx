@@ -3,6 +3,7 @@ import { shadcn } from "@clerk/ui/themes";
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { SanityLive } from "@/lib/sanity/live";
+import { PostHogIdentify } from "@/components/posthog-identify";
 import "./globals.css";
 
 const inter = Inter({
@@ -32,6 +33,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <ClerkProvider appearance={{ theme: shadcn }}>
+          <PostHogIdentify />
           {children}
         </ClerkProvider>
         <SanityLive />

@@ -7,8 +7,6 @@ import {
   Clock, 
   BookOpen, 
   Users, 
-  ArrowRight, 
-  Bookmark,
   CheckCircle2,
   Layers,
   Workflow,
@@ -25,7 +23,7 @@ import { urlFor } from "@/lib/sanity/image"
 import { formatDuration, formatStudentCount } from "@/lib/utils"
 import { SiteHeader } from "@/components/site-header"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { CourseActionButtons } from "@/components/course-action-buttons"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -136,16 +134,12 @@ export default async function CoursePage({ params }: CoursePageProps) {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 pt-6">
-                <Button size="lg" className="h-14 px-8 rounded-lg bg-gradient-to-r from-primary to-primary-400 hover:opacity-90 text-white font-medium text-lg gap-2 border-none shadow-md shadow-primary/20">
-                  {progressPercentage > 0 ? "Continue Learning" : "Start Learning"}
-                  <ArrowRight className="h-5 w-5" />
-                </Button>
-                <Button variant="secondary" size="lg" className="h-14 px-8 rounded-lg font-medium text-lg gap-2 border-neutral-200 bg-white">
-                  <Bookmark className="h-5 w-5" />
-                  Bookmark
-                </Button>
-              </div>
+              <CourseActionButtons
+                courseSlug={slug}
+                courseTitle={stegaClean(course.title) || ""}
+                courseLevel={course.level}
+                hasProgress={progressPercentage > 0}
+              />
             </div>
 
             <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl shadow-neutral-100">

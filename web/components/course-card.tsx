@@ -1,3 +1,5 @@
+"use client"
+
 import React from "react"
 import Link from "next/link"
 import Image from "next/image"
@@ -6,6 +8,7 @@ import { BarChart, Clock, BookOpen } from "lucide-react"
 import { urlFor } from "@/lib/sanity/image"
 import { formatDuration } from "@/lib/utils"
 import { stegaClean } from "@sanity/client/stega"
+import posthog from "posthog-js"
 
 export interface CourseCardProps {
   title: string
@@ -27,8 +30,17 @@ export function CourseCard({
   totalDuration,
   moduleCount,
 }: CourseCardProps) {
+  const handleClick = () => {
+    posthog.capture("course_card_clicked", {
+      course_slug: slug,
+      course_title: stegaClean(title),
+      course_level: stegaClean(level),
+      module_count: moduleCount,
+    })
+  }
+
   return (
-    <Link href={`/courses/${slug}`} className="block group">
+    <Link href={`/courses/${slug}`} className="block group" onClick={handleClick}>
       <Card className="h-full border-neutral-100 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden group-hover:-translate-y-1">
         <CardHeader className="p-0">
           <div className="aspect-video w-full bg-neutral-100 relative overflow-hidden">

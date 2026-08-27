@@ -4,6 +4,7 @@ import { useState } from "react"
 import { ChevronDown, CheckCircle2 } from "lucide-react"
 import { cn, formatDuration } from "@/lib/utils"
 import { COURSE_QUERY_RESULT } from "@/sanity.types"
+import posthog from "posthog-js"
 
 type Module = NonNullable<NonNullable<COURSE_QUERY_RESULT>['modules']>[number]
 
@@ -27,7 +28,17 @@ export function ModuleAccordion({ modules, completedLessonsIds }: ModuleAccordio
         return (
           <div key={module._key} className="border border-neutral-100 rounded-[32px] overflow-hidden bg-white shadow-sm mb-4">
             <button 
-              onClick={() => setOpenIndex(isOpen ? null : moduleIndex)}
+              onClick={() => {
+                const opening = !isOpen
+                setOpenIndex(isOpen ? null : moduleIndex)
+                if (opening) {
+                  posthog.capture("module_expanded", {
+                    module_title: module.title,
+                    module_index: moduleIndex + 1,
+                    lesson_count: module.lessons?.length ?? 0,
+                  })
+                }
+              }}
               className="w-full flex items-center justify-between p-8 cursor-pointer hover:bg-neutral-50/50 transition-colors group text-left"
             >
               <div className="flex items-center gap-8">
@@ -88,7 +99,12 @@ export function ModuleAccordion({ modules, completedLessonsIds }: ModuleAccordio
       {!showAll && modules.length > 6 && (
         <div className="flex justify-center mt-12">
           <button 
-            onClick={() => setShowAll(true)}
+            onClick={() => {
+              setShowAll(true)
+              posthog.capture("all_modules_shown", {
+                total_modules: modules.length,
+              })
+            }}
             className="flex items-center justify-center h-12 px-6 rounded-lg gap-2 border border-neutral-200 font-medium hover:bg-neutral-50 transition-colors"
           >
             Show all {modules.length} modules
