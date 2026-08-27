@@ -4,7 +4,6 @@ import Link from "next/link"
 import { Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { SignInButton, UserButton, Show } from "@clerk/nextjs"
-import Image from "next/image"
 
 export function SiteHeader() {
   return (
