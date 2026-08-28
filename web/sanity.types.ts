@@ -45,11 +45,9 @@ export type Module = {
   _type: "module";
   title?: string;
   summary?: string;
-  lessons?: Array<
-    {
-      _key: string;
-    } & LessonReference
-  >;
+  lessons?: Array<{
+    _key: string;
+  } & LessonReference>;
 };
 
 export type Resource = {
@@ -67,11 +65,9 @@ export type Progress = {
   _updatedAt: string;
   _rev: string;
   clerkUserId?: string;
-  completedLessons?: Array<
-    {
-      _key: string;
-    } & LessonReference
-  >;
+  completedLessons?: Array<{
+    _key: string;
+  } & LessonReference>;
   resumePositions?: Array<{
     lesson?: LessonReference;
     position?: number;
@@ -97,16 +93,12 @@ export type Video = {
   _updatedAt: string;
   _rev: string;
   url?: string;
-  chapters?: Array<
-    {
-      _key: string;
-    } & VideoChapter
-  >;
-  chunks?: Array<
-    {
-      _key: string;
-    } & VideoChunk
-  >;
+  chapters?: Array<{
+    _key: string;
+  } & VideoChapter>;
+  chunks?: Array<{
+    _key: string;
+  } & VideoChunk>;
 };
 
 export type SanityImageAssetReference = {
@@ -150,18 +142,14 @@ export type Course = {
   price?: number;
   popular?: boolean;
   studentCount?: number;
-  learningOutcomes?: Array<
-    {
-      _key: string;
-    } & LearningOutcome
-  >;
+  learningOutcomes?: Array<{
+    _key: string;
+  } & LearningOutcome>;
   instructor?: InstructorReference;
   category?: CategoryReference;
-  modules?: Array<
-    {
-      _key: string;
-    } & Module
-  >;
+  modules?: Array<{
+    _key: string;
+  } & Module>;
 };
 
 export type SanityImageCrop = {
@@ -205,42 +193,36 @@ export type Lesson = {
   duration?: number;
   freePreview?: boolean;
   studentCount?: number;
-  notes?: Array<
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?:
-          "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }
-    | {
-        asset?: SanityImageAssetReference;
-        media?: unknown;
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        _type: "image";
-        _key: string;
-      }
-  >;
+  notes?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
+  }>;
   keyPoints?: Array<string>;
   proTip?: string;
-  resources?: Array<
-    {
-      _key: string;
-    } & Resource
-  >;
+  resources?: Array<{
+    _key: string;
+  } & Resource>;
 };
 
 export type Category = {
@@ -387,34 +369,7 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type AllSanitySchemaTypes =
-  | VideoChunk
-  | VideoChapter
-  | LearningOutcome
-  | LessonReference
-  | Module
-  | Resource
-  | Progress
-  | AgentContext
-  | Video
-  | SanityImageAssetReference
-  | InstructorReference
-  | CategoryReference
-  | Course
-  | SanityImageCrop
-  | SanityImageHotspot
-  | Slug
-  | Lesson
-  | Category
-  | Instructor
-  | SanityImagePaletteSwatch
-  | SanityImagePalette
-  | SanityImageDimensions
-  | SanityImageMetadata
-  | SanityFileAsset
-  | SanityAssetSourceData
-  | SanityImageAsset
-  | Geopoint;
+export type AllSanitySchemaTypes = VideoChunk | VideoChapter | LearningOutcome | LessonReference | Module | Resource | Progress | AgentContext | Video | SanityImageAssetReference | InstructorReference | CategoryReference | Course | SanityImageCrop | SanityImageHotspot | Slug | Lesson | Category | Instructor | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
 
 // Source: ../web/lib/sanity/queries.ts
 // Variable: COURSES_QUERY
@@ -551,42 +506,36 @@ export type COURSE_QUERY_RESULT = {
       duration?: number;
       freePreview?: boolean;
       studentCount?: number;
-      notes?: Array<
-        | {
-            children?: Array<{
-              marks?: Array<string>;
-              text?: string;
-              _type: "span";
-              _key: string;
-            }>;
-            style?:
-              "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
-            listItem?: "bullet" | "number";
-            markDefs?: Array<{
-              href?: string;
-              _type: "link";
-              _key: string;
-            }>;
-            level?: number;
-            _type: "block";
-            _key: string;
-          }
-        | {
-            asset?: SanityImageAssetReference;
-            media?: unknown;
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            _type: "image";
-            _key: string;
-          }
-      >;
+      notes?: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      } | {
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+        _key: string;
+      }>;
       keyPoints?: Array<string>;
       proTip?: string;
-      resources?: Array<
-        {
-          _key: string;
-        } & Resource
-      >;
+      resources?: Array<{
+        _key: string;
+      } & Resource>;
     }> | null;
   }> | null;
 } | null;
@@ -613,42 +562,36 @@ export type LESSON_QUERY_RESULT = {
   duration?: number;
   freePreview?: boolean;
   studentCount?: number;
-  notes?: Array<
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?:
-          "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }
-    | {
-        asset?: SanityImageAssetReference;
-        media?: unknown;
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        _type: "image";
-        _key: string;
-      }
-  >;
+  notes?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
+  }>;
   keyPoints?: Array<string>;
   proTip?: string;
-  resources?: Array<
-    {
-      _key: string;
-    } & Resource
-  >;
+  resources?: Array<{
+    _key: string;
+  } & Resource>;
   course: {
     title: string | null;
     slug: string | null;
@@ -731,16 +674,12 @@ export type SEARCH_QUERY_RESULT = {
         slug: string | null;
       } | null;
     } | null;
-    matchedChapters: Array<
-      {
-        _key: string;
-      } & VideoChapter
-    > | null;
-    matchedChunks: Array<
-      {
-        _key: string;
-      } & VideoChunk
-    > | null;
+    matchedChapters: Array<{
+      _key: string;
+    } & VideoChapter> | null;
+    matchedChunks: Array<{
+      _key: string;
+    } & VideoChunk> | null;
   }>;
 };
 
@@ -764,15 +703,3 @@ export type USER_PROGRESS_QUERY_RESULT = {
   }>;
 } | null;
 
-// Query TypeMap
-import "@sanity/client";
-declare module "@sanity/client" {
-  interface SanityQueries {
-    '\n  *[_type == "course"] | order(title asc) {\n    _id,\n    title,\n    "slug": slug.current,\n    summary,\n    coverImage,\n    level,\n    price,\n    popular,\n    studentCount,\n    category->{ title, "slug": slug.current },\n    instructor->{ name, "slug": slug.current, photo },\n    "moduleCount": count(modules),\n    "totalDuration": math::sum(modules[].lessons[]->duration)\n  }\n': COURSES_QUERY_RESULT;
-    '\n  *[_type == "course" && slug.current == $slug][0] {\n    ...,\n    instructor->,\n    category->,\n    learningOutcomes[] {\n      icon,\n      title,\n      description\n    },\n    modules[] {\n      ...,\n      lessons[]-> {\n        ...,\n      }\n    }\n  }\n': COURSE_QUERY_RESULT;
-    '\n  *[_type == "lesson" && slug.current == $slug][0] {\n    ...,\n    "course": *[_type == "course" && references(^._id)][0] {\n      title,\n      "slug": slug.current\n    }\n  }\n': LESSON_QUERY_RESULT;
-    '\n  *[_type == "instructor" && slug.current == $slug][0] {\n    ...,\n    "courses": *[_type == "course" && instructor._ref == ^._id] {\n      title,\n      "slug": slug.current,\n      coverImage\n    }\n  }\n': INSTRUCTOR_QUERY_RESULT;
-    '\n  {\n    "lessons": *[_type == "lesson" && (title match $term || pt::text(notes) match $term)] {\n      _id,\n      _type,\n      title,\n      "slug": slug.current,\n      "course": *[_type == "course" && references(^._id)][0] {\n        title,\n        "slug": slug.current\n      }\n    },\n    "videoMoments": *[_type == "video" && (chapters[].label match $term || chunks[].text match $term)] {\n      _id,\n      _type,\n      url,\n      "lesson": *[_type == "lesson" && videoUrl == ^.url][0] {\n        title,\n        "slug": slug.current,\n        "course": *[_type == "course" && references(^._id)][0] {\n          title,\n          "slug": slug.current\n        }\n      },\n      "matchedChapters": chapters[label match $term],\n      "matchedChunks": chunks[text match $term]\n    }\n  }\n': SEARCH_QUERY_RESULT;
-    '\n  *[_type == "progress" && clerkUserId == $userId][0] {\n    ...,\n    completedLessons[]->{ _id }\n  }\n': USER_PROGRESS_QUERY_RESULT;
-  }
-}

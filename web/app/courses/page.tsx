@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/site-header"
 import { CourseCard } from "@/components/course-card"
 import { serverClient } from "@/lib/sanity/client"
 import { COURSES_QUERY } from "@/lib/sanity/queries"
+import { COURSES_QUERY_RESULT } from "@/sanity.types"
 
 export default async function CoursesPage() {
   const courses = await serverClient.fetch(COURSES_QUERY)
@@ -22,7 +23,7 @@ export default async function CoursesPage() {
           
           {courses.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {courses.map((course) => (
+              {courses.map((course: COURSES_QUERY_RESULT[number]) => (
                 <CourseCard 
                   key={course._id} 
                   title={course.title || ""}
