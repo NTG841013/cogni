@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/breadcrumb"
 import { Card } from "@/components/ui/card"
 import { ModuleAccordion } from "./ModuleAccordion"
+import { CourseProgressFooter } from "@/components/course-progress-footer"
 import { COURSE_QUERY_RESULT, USER_PROGRESS_QUERY_RESULT } from "@/sanity.types"
 
 interface CoursePageProps {
@@ -190,13 +191,19 @@ export default async function CoursePage({ params }: CoursePageProps) {
             </div>
 
             <ModuleAccordion 
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              modules={(course.modules as any) || []} 
+              modules={(course.modules as CourseModule[]) || []} 
               completedLessonsIds={completedLessonsIds} 
             />
           </section>
         </div>
       </main>
+
+      <CourseProgressFooter
+        courseSlug={slug}
+        courseTitle={stegaClean(course.title) || ""}
+        courseLevel={course.level}
+        progressPercentage={progressPercentage}
+      />
     </div>
   )
 }
