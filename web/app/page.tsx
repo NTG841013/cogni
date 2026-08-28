@@ -7,6 +7,7 @@ import { SiteHeader } from "@/components/site-header"
 import { CourseCard } from "@/components/course-card"
 import { serverClient } from "@/lib/sanity/client"
 import { COURSES_QUERY } from "@/lib/sanity/queries"
+import { COURSES_QUERY_RESULT } from "@/sanity.types"
 
 const decorativeBars = [
   { height: 120, width: 40, opacity: 0.3 },
@@ -93,7 +94,7 @@ export default async function Home() {
           
           {courses.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {courses.slice(0, 3).map((course) => (
+              {courses.slice(0, 3).map((course: COURSES_QUERY_RESULT[number]) => (
                 <CourseCard 
                   key={course._id} 
                   title={course.title || ""}

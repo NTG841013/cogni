@@ -34,13 +34,17 @@ import {
 } from "@/components/ui/breadcrumb"
 import { Card } from "@/components/ui/card"
 import { ModuleAccordion } from "./ModuleAccordion"
-import { COURSE_QUERY_RESULT } from "@/sanity.types"
+import { CourseProgressFooter } from "@/components/course-progress-footer"
+import { COURSE_QUERY_RESULT, USER_PROGRESS_QUERY_RESULT } from "@/sanity.types"
 
 interface CoursePageProps {
   params: Promise<{ slug: string }>
 }
 
 type LearningOutcome = NonNullable<NonNullable<COURSE_QUERY_RESULT>['learningOutcomes']>[number]
+type CourseModule = NonNullable<NonNullable<COURSE_QUERY_RESULT>['modules']>[number]
+type CourseLesson = NonNullable<CourseModule['lessons']>[number]
+type CompletedLesson = NonNullable<NonNullable<USER_PROGRESS_QUERY_RESULT>['completedLessons']>[number]
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   layers: Layers,
@@ -71,12 +75,12 @@ export default async function CoursePage({ params }: CoursePageProps) {
     ? await serverClient.fetch(USER_PROGRESS_QUERY, { userId })
     : null
 
-  const lessons = course.modules?.flatMap((m) => m.lessons || []) || []
+  const lessons = course.modules?.flatMap((m: CourseModule) => m.lessons || []) || []
   const totalLessons = lessons.length
-  const totalDuration = lessons.reduce((acc, l) => acc + (l.duration || 0), 0)
+  const totalDuration = lessons.reduce((acc: number, l: CourseLesson) => acc + (l.duration || 0), 0)
   
-  const completedLessonsIds = progress?.completedLessons?.map((cl) => cl._id) || []
-  const completedLessonsInCourse = lessons.filter((l) => completedLessonsIds.includes(l._id)).length
+  const completedLessonsIds = progress?.completedLessons?.map((cl: CompletedLesson) => cl._id) || []
+  const completedLessonsInCourse = lessons.filter((l: CourseLesson) => completedLessonsIds.includes(l._id)).length
 
   const progressPercentage = totalLessons > 0 
     ? Math.round((completedLessonsInCourse / totalLessons) * 100) 
@@ -187,13 +191,19 @@ export default async function CoursePage({ params }: CoursePageProps) {
             </div>
 
             <ModuleAccordion 
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              modules={(course.modules as any) || []} 
+              modules={(course.modules as CourseModule[]) || []} 
               completedLessonsIds={completedLessonsIds} 
             />
           </section>
         </div>
       </main>
+
+      <CourseProgressFooter
+        courseSlug={slug}
+        courseTitle={stegaClean(course.title) || ""}
+        courseLevel={course.level}
+        progressPercentage={progressPercentage}
+      />
     </div>
   )
 }
