@@ -203,6 +203,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
         courseTitle={stegaClean(course.title) || ""}
         courseLevel={course.level}
         progressPercentage={progressPercentage}
+        showProgress={!!userId}
       />
     </div>
   )
