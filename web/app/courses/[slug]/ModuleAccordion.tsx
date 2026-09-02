@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useState } from "react"
 import { ChevronDown, CheckCircle2 } from "lucide-react"
 import { cn, formatDuration } from "@/lib/utils"
@@ -9,24 +10,26 @@ import posthog from "posthog-js"
 type Module = NonNullable<NonNullable<COURSE_QUERY_RESULT>['modules']>[number]
 
 interface ModuleAccordionProps {
+  courseSlug: string
   modules: Module[]
   completedLessonsIds: string[]
 }
 
-export function ModuleAccordion({ modules, completedLessonsIds }: ModuleAccordionProps) {
+export function ModuleAccordion({ courseSlug, modules, completedLessonsIds }: ModuleAccordionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
   const [showAll, setShowAll] = useState(false)
 
   const displayedModules = showAll ? modules : modules.slice(0, 6)
 
   return (
-    <div className="space-y-4">
+    <div className="bg-neutral-50 rounded-[32px] overflow-hidden border border-neutral-100">
       {displayedModules.map((module, moduleIndex) => {
+        const moduleKey = module._key || `module-${moduleIndex}`
         const isOpen = openIndex === moduleIndex
         const moduleDuration = module.lessons?.reduce((acc, l) => acc + (l.duration || 0), 0) || 0
 
         return (
-          <div key={module._key} className="border border-neutral-100 rounded-[32px] overflow-hidden bg-white shadow-sm mb-4">
+          <div key={moduleKey} className="border-b last:border-b-0 border-neutral-100">
             <button 
               onClick={() => {
                 const opening = !isOpen
@@ -39,55 +42,60 @@ export function ModuleAccordion({ modules, completedLessonsIds }: ModuleAccordio
                   })
                 }
               }}
-              className="w-full flex items-center justify-between p-8 cursor-pointer hover:bg-neutral-50/50 transition-colors group text-left"
+              className="w-full flex items-center justify-between p-6 sm:p-8 cursor-pointer hover:bg-white transition-all group text-left"
             >
-              <div className="flex items-center gap-8">
-                <div className="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-900 font-bold text-sm shrink-0">
+              <div className="flex items-center gap-4 sm:gap-8">
+                <div className="text-neutral-900 font-bold text-lg shrink-0 w-6 sm:w-8 text-center">
                   {moduleIndex + 1}
                 </div>
                 <div>
-                  <h3 className="text-heading-3 font-sans font-semibold text-neutral-900 group-hover:text-primary transition-colors">
+                  <h3 className="text-heading-3 font-sans font-bold text-neutral-900 group-hover:text-primary transition-colors">
                     {module.title}
                   </h3>
                   {module.summary && (
-                    <p className="text-body text-neutral-500 mt-1 max-w-2xl">
+                    <p className="text-body text-neutral-500 mt-1 max-w-2xl font-medium">
                       {module.summary}
                     </p>
                   )}
                 </div>
               </div>
               <div className="flex items-center gap-6">
-                <span className="text-small text-neutral-400">
+                <span className="text-small font-bold text-neutral-400">
                   {formatDuration(moduleDuration)}
                 </span>
                 <ChevronDown className={cn(
-                  "h-5 w-5 text-neutral-300 transition-transform duration-200",
+                  "h-5 w-5 text-neutral-300 transition-transform duration-300",
                   isOpen && "rotate-180"
                 )} />
               </div>
             </button>
             
             {isOpen && (
-              <div className="border-t border-neutral-50 bg-neutral-50/20 pb-4">
-                {module.lessons?.map((lesson) => {
+              <div className="bg-white/50 pb-4">
+                {module.lessons?.map((lesson, lessonIndex) => {
                   const isCompleted = completedLessonsIds.includes(lesson._id)
+                  const lessonKey = lesson._id || `${moduleKey}-lesson-${lessonIndex}`
                   return (
-                    <div key={lesson._id} className="flex items-center justify-between py-4 px-8 hover:bg-neutral-50/50 transition-colors border-b last:border-b-0 border-neutral-50 ml-20 mr-4">
-                      <div className="flex items-center gap-4">
+                    <Link 
+                      key={lessonKey} 
+                      href={`/courses/${courseSlug}/${lesson.slug?.current}`}
+                      className="flex items-center justify-between py-5 px-6 sm:px-8 hover:bg-white transition-colors border-b last:border-b-0 border-neutral-100/50 sm:ml-16 sm:mr-8 group"
+                    >
+                      <div className="flex items-center gap-5">
                         <div className={cn(
-                          "w-6 h-6 rounded-full border flex items-center justify-center transition-colors",
-                          isCompleted ? "bg-green-500 border-green-500" : "border-neutral-100 bg-white"
+                          "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all",
+                          isCompleted ? "bg-primary border-primary" : "border-neutral-200 bg-white"
                         )}>
-                          {isCompleted && <CheckCircle2 className="h-3.5 w-3.5 text-white" />}
+                          {isCompleted && <CheckCircle2 className="h-3 w-3 text-white" />}
                         </div>
-                        <span className="text-body font-medium text-neutral-700">
+                        <span className="text-body font-medium text-neutral-700 group-hover:text-primary transition-colors">
                           {lesson.title}
                         </span>
                       </div>
-                      <span className="text-small text-neutral-400">
+                      <span className="text-small font-medium text-neutral-400">
                         {formatDuration(lesson.duration || 0)}
                       </span>
-                    </div>
+                    </Link>
                   )
                 })}
               </div>

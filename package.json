@@ -9,5 +9,13 @@
     "dev": "npm run dev --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present"
+  },
+  "dependencies": {
+    "@ai-sdk/mcp": "^2.0.41",
+    "@ai-sdk/openai": "^4.0.54",
+    "ai": "^7.0.88",
+    "lightningcss": "^1.33.0",
+    "react-markdown": "^10.1.0",
+    "zod": "^4.5.4"
   }
 }

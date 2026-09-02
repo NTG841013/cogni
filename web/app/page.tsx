@@ -1,9 +1,9 @@
 import Link from "next/link"
-import { Search, ArrowRight, Star, BookOpen } from "lucide-react"
+import { ArrowRight, Star, BookOpen } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
 import { SiteHeader } from "@/components/site-header"
+import { HomeSearchHero } from "@/components/home-search-hero"
 import { CourseCard } from "@/components/course-card"
 import { serverClient } from "@/lib/sanity/client"
 import { COURSES_QUERY } from "@/lib/sanity/queries"
@@ -67,19 +67,7 @@ export default async function Home() {
 
         {/* Search Bar Section */}
         <section className="container mx-auto px-4 pb-24">
-          <div className="max-w-3xl mx-auto relative group">
-            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-primary transition-colors">
-              <Search className="h-6 w-6" />
-            </div>
-            <Input 
-              placeholder="Ask anything about your learning..." 
-              className="h-20 pl-16 pr-24 rounded-2xl border-neutral-100 bg-white text-lg shadow-lg shadow-neutral-200/40 focus-visible:ring-primary focus-visible:border-primary transition-all"
-            />
-            <div className="absolute right-6 top-1/2 -translate-y-1/2 flex items-center gap-1 px-2.5 py-1.5 rounded-md border border-neutral-100 bg-neutral-50 text-neutral-400 text-xs font-medium">
-              <span className="text-[14px]">⌘</span>
-              <span>K</span>
-            </div>
-          </div>
+          <HomeSearchHero />
         </section>
 
         {/* Courses Section */}

@@ -12,6 +12,7 @@ interface CourseProgressFooterProps {
   courseLevel?: string | null
   progressPercentage: number
   showProgress: boolean
+  firstLessonSlug?: string
 }
 
 export function CourseProgressFooter({
@@ -20,6 +21,7 @@ export function CourseProgressFooter({
   courseLevel,
   progressPercentage,
   showProgress,
+  firstLessonSlug,
 }: CourseProgressFooterProps) {
   if (!showProgress) return null
 
@@ -51,7 +53,7 @@ export function CourseProgressFooter({
           onClick={handleContinue}
           className="h-14 px-10 rounded-lg bg-primary hover:bg-primary/90 text-white font-medium text-lg gap-2 shrink-0 w-full md:w-auto shadow-md shadow-primary/20"
         >
-          <Link href={`/courses/${courseSlug}/lessons`}>
+          <Link href={`/courses/${courseSlug}/${firstLessonSlug || ""}`}>
             {progressPercentage > 0 ? "Continue Learning" : "Start Learning"}
             <ArrowRight className="h-5 w-5" />
           </Link>

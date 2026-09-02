@@ -1,0 +1,10 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.000
+Routing starts with the app directory.
+
+00:00:08.500 --> 00:00:12.000
+Layouts persist across navigation.
+
+00:00:40.000 --> 00:00:44.000
+Templates remount on every navigation.

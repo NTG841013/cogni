@@ -11,10 +11,7 @@ export function PostHogIdentify() {
     if (!isLoaded) return
 
     if (user) {
-      posthog.identify(user.id, {
-        email: user.primaryEmailAddress?.emailAddress,
-        name: user.fullName,
-      })
+      posthog.identify(user.id)
     }
   }, [user, isLoaded])
 
