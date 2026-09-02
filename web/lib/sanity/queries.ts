@@ -42,7 +42,18 @@ export const LESSON_QUERY = defineQuery(`
     ...,
     "course": *[_type == "course" && references(^._id)][0] {
       title,
-      "slug": slug.current
+      "slug": slug.current,
+      level,
+      modules[] {
+        ...,
+        lessons[]-> {
+          _id,
+          title,
+          "slug": slug.current,
+          duration,
+          summary
+        }
+      }
     }
   }
 `)

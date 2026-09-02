@@ -143,6 +143,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
                 courseTitle={stegaClean(course.title) || ""}
                 courseLevel={course.level}
                 hasProgress={progressPercentage > 0}
+                firstLessonSlug={lessons[0]?.slug?.current}
               />
             </div>
 
@@ -160,18 +161,20 @@ export default async function CoursePage({ params }: CoursePageProps) {
           </section>
 
           {/* What you'll learn */}
-          <section className="mb-24">
-            <h2 className="text-heading-1 font-serif text-neutral-900 mb-10">What you&apos;ll learn</h2>
-            <div className="grid md:grid-cols-2 gap-6">
+          <section className="mb-24 bg-neutral-50 rounded-[40px] p-12 lg:p-16 border border-neutral-100">
+            <h2 className="text-heading-1 font-serif text-neutral-900 mb-12">What you&apos;ll learn</h2>
+            <div className="grid md:grid-cols-2 gap-8">
               {course.learningOutcomes?.map((outcome: LearningOutcome, i: number) => (
-                <Card key={i} className="p-8 border-neutral-100 shadow-sm hover:shadow-md transition-shadow rounded-xl">
-                  <div className="flex items-start gap-6">
-                    <DynamicIcon name={outcome.icon || ""} className="h-8 w-8 text-primary shrink-0 mt-1" />
-                    <div className="space-y-2">
-                      <h3 className="text-heading-3 font-sans font-semibold text-neutral-900">
+                <Card key={i} className="p-8 border-none shadow-sm hover:shadow-md transition-all rounded-3xl bg-white group">
+                  <div className="flex items-start gap-8">
+                    <div className="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors">
+                      <DynamicIcon name={outcome.icon || ""} className="h-7 w-7 text-primary" />
+                    </div>
+                    <div className="space-y-3 pt-1">
+                      <h3 className="text-heading-3 font-sans font-bold text-neutral-900 leading-tight">
                         {outcome.title}
                       </h3>
-                      <p className="text-body text-neutral-500">
+                      <p className="text-body text-neutral-500 leading-relaxed font-medium">
                         {outcome.description}
                       </p>
                     </div>
@@ -191,6 +194,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
             </div>
 
             <ModuleAccordion 
+              courseSlug={slug}
               modules={(course.modules as CourseModule[]) || []} 
               completedLessonsIds={completedLessonsIds} 
             />
@@ -204,6 +208,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
         courseLevel={course.level}
         progressPercentage={progressPercentage}
         showProgress={!!userId}
+        firstLessonSlug={lessons[0]?.slug?.current}
       />
     </div>
   )

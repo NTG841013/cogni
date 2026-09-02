@@ -2,9 +2,11 @@ import { createMCPClient, type MCPClient } from '@ai-sdk/mcp'
 import { openai } from '@ai-sdk/openai'
 import { generateText, Output, stepCountIs } from 'ai'
 import { z } from 'zod'
+import { auth } from '@clerk/nextjs/server'
 import { normalizeSearchOutput, modelSearchOutputSchema, type SearchMetadata } from '@/lib/search'
 import { serverClient } from '@/lib/sanity/client'
 import { urlFor } from '@/lib/sanity/image'
+import { getPostHogClient } from '@/lib/posthog-server'
 
 export const runtime = 'nodejs'
 
@@ -170,6 +172,23 @@ export async function POST(request: Request) {
     const modelResults = modelSearchOutputSchema.parse(generation.output).results
     const metadata = await loadSearchMetadata(modelResults.map((result) => result.id))
     const normalized = normalizeSearchOutput(generation.output, parsedRequest.data.query, metadata)
+
+    // Track search event server-side
+    const { userId } = await auth()
+    if (userId) {
+      const posthog = getPostHogClient()
+      posthog.capture({
+        distinctId: userId,
+        event: 'search_performed',
+        properties: {
+          query: parsedRequest.data.query,
+          result_count: normalized.totalResults,
+          course_count: normalized.courseCount,
+        },
+      })
+      await posthog.shutdown()
+    }
+
     return Response.json(normalized)
   } catch (error) {
     console.error('Search request failed', error)

@@ -542,7 +542,7 @@ export type COURSE_QUERY_RESULT = {
 
 // Source: ../web/lib/sanity/queries.ts
 // Variable: LESSON_QUERY
-// Query: *[_type == "lesson" && slug.current == $slug][0] {    ...,    "course": *[_type == "course" && references(^._id)][0] {      title,      "slug": slug.current    }  }
+// Query: *[_type == "lesson" && slug.current == $slug][0] {    ...,    "course": *[_type == "course" && references(^._id)][0] {      title,      "slug": slug.current,      modules[] {        ...,        lessons[]-> {          _id,          title,          "slug": slug.current,          duration        }      }    }  }
 export type LESSON_QUERY_RESULT = {
   _id: string;
   _type: "lesson";
@@ -595,6 +595,18 @@ export type LESSON_QUERY_RESULT = {
   course: {
     title: string | null;
     slug: string | null;
+    modules: Array<{
+      _key: string;
+      _type: "module";
+      title?: string;
+      summary?: string;
+      lessons: Array<{
+        _id: string;
+        title: string | null;
+        slug: string | null;
+        duration: number | null;
+      }> | null;
+    }> | null;
   } | null;
 } | null;
 

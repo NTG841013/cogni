@@ -1,0 +1,9 @@
+{
+  "videos": [
+    {
+      "url": "https://www.youtube.com/watch?v=fixture123",
+      "transcript": "transcript.vtt",
+      "chapters": "chapters.json"
+    }
+  ]
+}
